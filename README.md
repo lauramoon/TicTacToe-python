@@ -1,6 +1,8 @@
 # TicTacToe
 Play tic tac toe in the command line like it's 1984!
 
+Note: trying to figure out why Visual Studio only uploaded the git files and not the whole solution. The whole thing will be up shortly, hopefully...
+
 Enter 'python TicTacToe.py' in the comand line to play.
 
 There are 3 modes for the computer move selection:
