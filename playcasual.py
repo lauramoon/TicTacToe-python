@@ -1,6 +1,7 @@
 from common import *
 from board import Board
 
+
 def play_chosen_move(game, move):
     input("Press 'Enter' to have the computer play")
     print("")
@@ -46,7 +47,7 @@ def playcasual(game):
             get_human_move(game)
         
         # moves 5-8, have to check for blocking move, then for winning move
-        for i in range(0,2):
+        for i in range(0, 2):
             winner = game.find_winner()
             block = game.find_block()
             if winner != 0:
@@ -60,7 +61,7 @@ def playcasual(game):
                 play_random_move(game)
 
             get_human_move(game)
-            if game.check_for_win() == True:
+            if game.check_for_win():
                 game.result = 0  # human wins
                 break
     
@@ -68,10 +69,11 @@ def playcasual(game):
         if game.result == -1:
             move = int(max(game.moves))
             play_chosen_move(game, move)
-            if game.check_for_win() == True:
-                game.result = 1  # AI wins
+            if game.check_for_win():
+                # AI wins
+                game.result = 1
+            else:
+                # Game is a draw
+                game.result = 2
 
-    # if all 9 turns complete without win, the game is a draw
-    if game.result == -1:
-        game.result = 2
 

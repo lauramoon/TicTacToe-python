@@ -105,6 +105,7 @@ def get_human_move(game):
     game.updateboards(0)
     printboard(game.cleanboard)
 
+
 def play_random_move(game):
     if game.turn != 1:
         next = input("Press 'Enter' to have the computer play")
