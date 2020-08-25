@@ -9,12 +9,12 @@ def playrandom(game):
         for i in range(0,4):
             # moves 2-9
             play_random_move(game)
-            if game.check_for_win() == True:
+            if game.check_for_win():
                 game.result = 1  # computer
                 break
 
             get_human_move(game)
-            if game.check_for_win() == True:
+            if game.check_for_win():
                 game.result = 0  # human wins
                 break
 

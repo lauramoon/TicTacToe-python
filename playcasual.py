@@ -35,7 +35,7 @@ def playcasual(game):
                 play_random_move(game)
 
             get_human_move(game)
-            if game.check_for_win() == True:
+            if game.check_for_win():
                 game.result = 0  # human wins
                 break
 

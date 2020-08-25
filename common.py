@@ -1,26 +1,29 @@
 import time
 
 def printboard(b):
-    # prints a board to screen
+    """
+    prints tic tac toe board to screen
+    :param b: list of symbols or numbers to put in boxes, starting upper left, by rows
+    :return: nothing
+    """
     wsbig = "        |     |     "
-    wssm = " | "
+    wssm = "  |  "
     line = "   -----|-----|-----"
 
     print("")
     print(wsbig)
-    print("    ", b[1], wssm, b[2], wssm, b[3])
+    print("     " + b[1] + wssm + b[2] + wssm + b[3])
     print(wsbig)
     print(line)
     print(wsbig)
-    print("    ", b[4], wssm, b[5], wssm, b[6])
+    print("     " + b[4] + wssm + b[5] + wssm + b[6])
     print(wsbig)
     print(line)
     print(wsbig)
-    print("    ", b[7], wssm, b[8], wssm, b[9])
+    print("     " + b[7] + wssm + b[8] + wssm + b[9])
     print(wsbig)
     print("")
 
-    # time.sleep(2)
 
 def get_human_move(game):
     # Everything to get, record, and display the next human move
@@ -50,17 +53,14 @@ def get_human_move(game):
         move9 = max(game.moves)
         game.record[9] = int(move9)
         print("There is only one place left to play")
-        next = input("Press 'Enter' to see your last move")
+        input("Press 'Enter' to see your last move")
 
     else:
-        if game.turn%2 == 1:
-            symbol = "X"
-        else:
-            symbol = "O"
+        symbol = game.turnmark[game.turn]
 
-        next = input("Press 'Enter' to pick your next move")
+        input("Press 'Enter' to pick your next move")
         printboard(game.numboard)
-        print("You are playing", symbol)
+        print("You are playing " + symbol)
         move = " "
 
         while move not in game.moves:
@@ -82,23 +82,25 @@ def get_human_move(game):
             # need to add appropriate board transformation
             # for turn 3 when in smart mode
 
-            if game.record[2] == 1:
             # if AI played in corner turn 2, see if need to flip board along x = -y axis
             # (same as rotate cw by 90, then flip along vertical, first two moves on tboard
             # stay in the same place)
+            if game.record[2] == 1:
                 if move in [2, 3, 6]:
                     game.rotate = 1
                     game.flip = True
-            else: # game.trecord = 5
+            # if AI played in center turn 2
+            else:
+                # if turn 1 is at 1 on tboard, transformation same as just above,
+                # but have to add to any rotation that already might be there
                 if game.trecord[1] == 1:
-                    # if turn 1 is at 1 on tboard, transformation same as just above, 
-                    # but have to add to any rotation that already might be there
+
                     if game.transform(move) in [2, 3, 6]:
                         game.rotate = (game.rotate + 1) % 4
                         game.flip = True
 
+                # turn 1 is at position 2 on tboard; flip if turn 3 on right side
                 else:
-                    # turn 1 is at position 2 on tboard; flip if turn 3 on right side
                     if game.transform(move) in [3, 6, 9]:
                         game.flip = True
 
@@ -108,7 +110,7 @@ def get_human_move(game):
 
 def play_random_move(game):
     if game.turn != 1:
-        next = input("Press 'Enter' to have the computer play")
+        input("Press 'Enter' to have the computer play")
         print("")
     print("Computer plays: ")
 
