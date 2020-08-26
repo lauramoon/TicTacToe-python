@@ -1,7 +1,9 @@
 
-class Board():
-    # Defines the game board
-    # board positions are 1 - 9; initial 0 in lists is ignored
+class Board:
+    """
+    Defines the game board and all pertinent aspects of the game
+    Board positions are 1 - 9, ignoring index 0 in lists
+    """
 
     # sets of winning moves
     winsets = [{1, 2, 3}, {4, 5, 6}, {7, 8, 9},
@@ -10,7 +12,7 @@ class Board():
 
     # Defines the mark (X or O) for the turn. X goes first
     turnmark = {}
-    for i in range(1, 10):
+    for i in range(1, 11):
         if i % 2 == 0:
             turnmark[i] = "O"
         else:
@@ -64,6 +66,7 @@ class Board():
             rotation = 4 - self.rotate
         else:
             print("typo in rotation direction")
+        print(self.rotate)
 
         if rotation == 1:
             matrix = [0, 3, 6, 9, 2, 5, 8, 1, 4, 7]
@@ -95,53 +98,35 @@ class Board():
 
         return position
 
-    def updateboards(self, p):
+    def update_board(self, move):
         """
         takes the latest move and adds it to the numbered and clean boards,
-        drops the move from possible moves, updates set of moves and increments turn number
-        p is the player - 0 - human and random AI and casual AI play on board
-        smart AI (1) plays on transformed board
+        drops the move from possible moves, updates the key (for smart mode),
+        updates set of moves and increments turn number
+        param move: the move for the current turn
+        return: nothing
         """
         # board symbol is X for odd turns, O for even
         symbol = self.turnmark[self.turn]
 
-        # if playing smart mode, need to consider the transformed board
-        if self.mode == 3:
-            if p == 0:
-                # get placement of last move
-                position = self.record[self.turn]
-                # transform
-                tposition = self.transform(position)
-                # and put in the transformed board record
-                self.trecord[self.turn] = tposition
-            else:
-                # last move is in the trecord if smart AI just played
-                tposition = self.trecord[self.turn]
-                # find actual position
-                position = self.rev_transform(tposition)
-                # and put it in the regular board record
-                self.record[self.turn] = position
-        # for random and smart mode, just get last position and update
-        else:
-            position = self.record[self.turn]
-            self.record[self.turn] = position
-            print(self.record)
+        # update game record
+        self.record[self.turn] = move
 
         # update numbered and clean boards
-        self.numboard[position] = symbol
-        self.cleanboard[position] = symbol
+        self.numboard[move] = symbol
+        self.cleanboard[move] = symbol
 
         # update moves taken
         if symbol == "X":
-            self.movesX.add(position)
+            self.movesX.add(move)
         else:
-            self.movesO.add(position)
+            self.movesO.add(move)
 
-        # the key is an integer that looks like the string of turns already taken
+        # update the key
         self.key = self.key*10 + self.trecord[self.turn]
 
         # drop the last move from the set of possible moves
-        self.moves.discard(str(position))
+        self.moves.discard(str(move))
 
         # increment turn number
         self.turn += 1
@@ -151,7 +136,7 @@ class Board():
         returns set of all moves of current player
         return: set of moves of current player
         """
-        if self.turn == "X":
+        if self.turnmark[self.turn] == "X":
             moveset = self.movesX
         else:
             moveset = self.movesO
@@ -163,7 +148,7 @@ class Board():
         returns set of all moves of previous player
         return: set of moves of previous player
         """
-        if self.turn == "X":
+        if self.turnmark[self.turn] == "X":
             moveset = self.movesO
         else:
             moveset = self.movesX
@@ -174,11 +159,10 @@ class Board():
         """
         check if anyone won, used in random and casual mode
         called after boards are updated, so check previous play
-        return: True if previous player won
+        return: True if previous player won, False if no win
         """
         # get the moves of the previous player
         moveset = self.previous_moveset()
-
         # True if previous player won
         won = False
 
@@ -192,7 +176,7 @@ class Board():
     def find_block(self):
         """
         for casual mode, sees if there's a potential win to block
-        maybe could be used to replace later moves in smart move, haven't tried
+        (could be used to replace later moves in smart move, haven't tried it)
         return: first blocking move found; 0 if none found
         """
         # get the moves of the previous player
@@ -203,9 +187,9 @@ class Board():
 
         for n in self.winsets:
             # go through sets of winning moves, see if
-            # 1) winning set has two in common with opponemt's moves
-            # do this by subtacting moveset from winset; true if set has one member
-            # 2) see if that member is in avaiable moves. if so, need to play it
+            # 1) winning set has two in common with opponent's moves
+            # do this by subtracting moveset from winset; true if set has one member
+            # 2) see if that member is in available moves. if so, need to play it
             diff = n - moveset
             if len(diff) == 1:
                 # get the one move in diff

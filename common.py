@@ -1,4 +1,5 @@
-import time
+""" functions used by various modules"""
+
 
 def printboard(b):
     """
@@ -26,10 +27,12 @@ def printboard(b):
 
 
 def get_human_move(game):
-    # Everything to get, record, and display the next human move
-    # Turns 1 and 9 are done a little differently
-    # When in smart mode (mode 3), need to appropriately transform board
-    # after first 3 turns
+    """
+    Gets the human player's next move
+    :param game: game being played
+    :return: number representing location of next move
+    """
+    # Turn 1 gets slightly different question
     if game.turn == 1:
         printboard(game.numboard)
 
@@ -37,21 +40,10 @@ def get_human_move(game):
         while move not in game.moves:
             move = input("Where do you play first? Enter the number for the location: ")
         move = int(move)
-        game.record[1] = move
 
-        if game.mode == 3:
-            # if in smartmode, need to rotate board to get tboard
-            # before updating move (including creating key)
-            if move == 3 or move == 6:
-                game.rotate = 3
-            if move == 9 or move == 8:
-                game.rotate = 2
-            if move == 7 or move == 4:
-                game.rotate = 1
-
+    # no need to ask for ninth move, as only one choice left
     elif game.turn == 9:
-        move9 = max(game.moves)
-        game.record[9] = int(move9)
+        move = int(max(game.moves))
         print("There is only one place left to play")
         input("Press 'Enter' to see your last move")
 
@@ -67,58 +59,29 @@ def get_human_move(game):
             move = input("Enter your next move location: ")
 
         move = int(move)
-        game.record[game.turn] = move
+        # game.record[game.turn] = move
 
-        if game.turn == 2 and game.mode == 3:
-            # rotate board based on move choice
-            if move == 3 or move == 6:
-                game.rotate = 3
-            if move == 9 or move == 8:
-                game.rotate = 2
-            if move == 7 or move == 4:
-                game.rotate = 1
-
-        if game.turn == 3 and game.mode == 3:
-            # need to add appropriate board transformation
-            # for turn 3 when in smart mode
-
-            # if AI played in corner turn 2, see if need to flip board along x = -y axis
-            # (same as rotate cw by 90, then flip along vertical, first two moves on tboard
-            # stay in the same place)
-            if game.record[2] == 1:
-                if move in [2, 3, 6]:
-                    game.rotate = 1
-                    game.flip = True
-            # if AI played in center turn 2
-            else:
-                # if turn 1 is at 1 on tboard, transformation same as just above,
-                # but have to add to any rotation that already might be there
-                if game.trecord[1] == 1:
-
-                    if game.transform(move) in [2, 3, 6]:
-                        game.rotate = (game.rotate + 1) % 4
-                        game.flip = True
-
-                # turn 1 is at position 2 on tboard; flip if turn 3 on right side
-                else:
-                    if game.transform(move) in [3, 6, 9]:
-                        game.flip = True
-
-    game.updateboards(0)
-    printboard(game.cleanboard)
+    return move
 
 
-def play_random_move(game):
+def get_random_move(game):
+    """
+    Takes a game board and returns valid random move
+    :param game: the game being played
+    :return: valid random move from the set of moves remaining
+    """
+    move = int(game.moves.pop())
+    return move
+
+
+def computer_move_text(game):
+    """
+    Prompts human to press enter when ready to see computer's next move,
+    headlines the board with the computer's move
+    :param game:
+    :return: nothing
+    """
     if game.turn != 1:
         input("Press 'Enter' to have the computer play")
         print("")
     print("Computer plays: ")
-
-    AImove = int(game.moves.pop())
-    game.record[game.turn] = AImove
-    game.updateboards(0)
-    printboard(game.cleanboard)
-
-
-
-

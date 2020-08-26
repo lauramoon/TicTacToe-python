@@ -1,41 +1,40 @@
 from common import *
 from board import Board
 
+
 def playrandom(game):
-    if game.first == 0:
-        # if human goes first
-        get_human_move(game)
-
-        for i in range(0,4):
-            # moves 2-9
-            play_random_move(game)
+    """
+    Plays a game where the computer always picks a random move.
+    Updates game.result with the result
+    :param game: the game being played
+    :return: nothing
+    """
+    # keep playing a move until there's a result
+    while game.result == -1:
+        # if human turn
+        if (game.first + game.turn) % 2 == 1:
+            move = get_human_move(game)
+            game.update_board(move)
             if game.check_for_win():
-                game.result = 1  # computer
-                break
+                # if True, human wins
+                game.result = 0
 
-            get_human_move(game)
+        # else computer's turn
+        else:
+            move = get_random_move(game)
+            computer_move_text(game)
+            game.update_board(move)
             if game.check_for_win():
-                game.result = 0  # human wins
-                break
+                # if True, computer wins
+                game.result = 1
 
-    else:
-        play_random_move(game) # move 1
+        printboard(game.cleanboard)
 
-        for i in range(0,4):
-            # moves 2-9
-            get_human_move(game)
-            if game.check_for_win() == True:
-                game.result = 0  # human wins
-                break
+        # Check if board full and no result
+        if game.turn == 10 and game.result == -1:
+            game.result = 2
+            break
 
-            play_random_move(game)
-            if game.check_for_win() == True:
-                game.result = 1  # computer wins
-                break
-
-    # if all 9 turns complete without win, the game is a draw
-    if game.result == -1:
-        game.result = 2
 
 
 
