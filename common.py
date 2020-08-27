@@ -1,28 +1,28 @@
 """ functions used by various modules"""
 
 
-def printboard(b):
+def print_board(b):
     """
     prints tic tac toe board to screen
     :param b: list of symbols or numbers to put in boxes, starting upper left, by rows
     :return: nothing
     """
-    wsbig = "        |     |     "
-    wssm = "  |  "
+    white_space_big = "        |     |     "
+    small_space = "  |  "
     line = "   -----|-----|-----"
 
     print("")
-    print(wsbig)
-    print("     " + b[1] + wssm + b[2] + wssm + b[3])
-    print(wsbig)
+    print(white_space_big)
+    print("     " + b[1] + small_space + b[2] + small_space + b[3])
+    print(white_space_big)
     print(line)
-    print(wsbig)
-    print("     " + b[4] + wssm + b[5] + wssm + b[6])
-    print(wsbig)
+    print(white_space_big)
+    print("     " + b[4] + small_space + b[5] + small_space + b[6])
+    print(white_space_big)
     print(line)
-    print(wsbig)
-    print("     " + b[7] + wssm + b[8] + wssm + b[9])
-    print(wsbig)
+    print(white_space_big)
+    print("     " + b[7] + small_space + b[8] + small_space + b[9])
+    print(white_space_big)
     print("")
 
 
@@ -34,7 +34,7 @@ def get_human_move(game):
     """
     # Turn 1 gets slightly different question
     if game.turn == 1:
-        printboard(game.numboard)
+        print_board(game.num_board)
 
         move = input("Where do you play first? ")
         while move not in game.moves:
@@ -48,10 +48,10 @@ def get_human_move(game):
         input("Press 'Enter' to see your last move")
 
     else:
-        symbol = game.turnmark[game.turn]
+        symbol = game.turn_mark[game.turn]
 
         input("Press 'Enter' to pick your next move")
-        printboard(game.numboard)
+        print_board(game.num_board)
         print("You are playing " + symbol)
         move = " "
 

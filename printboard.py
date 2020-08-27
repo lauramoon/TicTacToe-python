@@ -1,4 +1,4 @@
-from common import printboard
+from common import print_board
 moves = input("Enter move string: ")
 
 b = [" "]*10
@@ -14,4 +14,4 @@ for i in range(0, number):
         symb = "O"
     b[move] = symb
 
-printboard(b)
+print_board(b)

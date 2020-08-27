@@ -1,8 +1,7 @@
 from common import *
-from board import Board
 
 
-def playrandom(game):
+def play_random(game):
     """
     Plays a game where the computer always picks a random move.
     Updates game.result with the result
@@ -28,16 +27,9 @@ def playrandom(game):
                 # if True, computer wins
                 game.result = 1
 
-        printboard(game.cleanboard)
+        print_board(game.clean_board)
 
         # Check if board full and no result
         if game.turn == 10 and game.result == -1:
             game.result = 2
             break
-
-
-
-
-
-
-

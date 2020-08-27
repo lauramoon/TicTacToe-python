@@ -1,11 +1,10 @@
 from board import Board
-from common import printboard
-from playsmart import playsmart
-from playrandom import playrandom
-from playcasual import playcasual
+from playsmart import play_smart
+from playrandom import play_random
+from playcasual import play_casual
 
 
-def playgame():
+def play_game():
     """
     One play-through of a game of tic-tac-toe.
     :return:
@@ -35,11 +34,11 @@ def playgame():
 
     # Play game according to selected game mode
     if mode == 1:
-        playrandom(game)
+        play_random(game)
     if mode == 2:
-        playcasual(game)
+        play_casual(game)
     if mode == 3:
-        playsmart(game)
+        play_smart(game)
 
     # Report game result to the player
     # could return result to main and keep a tally of results there
@@ -55,18 +54,17 @@ def main():
     :return: nothing
     """
     print("You are playing Tic Tac Toe")
-    playagain = True
+    play_again = True
 
     # keep playing game until player decides not to play again
-    while playagain == True:
+    while play_again:
         # single game play
-        playgame()
+        play_game()
         again = " "
         while again not in ["Y", "N"]:
             again = input("Do you want to play again? (Y/N)").upper()
         if again == "N":
-            playagain = False
+            play_again = False
 
 
 main()
-

@@ -11,29 +11,29 @@ def get_AI_move(game):
     """
     # first three turns have set moves
     if game.turn == 1:
-        tmove = 5
+        t_move = 5
 
     elif game.turn == 2:
         # If human played in middle, play in top left, else play in middle
-        if game.trecord[1] == 5:
-            tmove = 1
+        if game.t_record[1] == 5:
+            t_move = 1
         else:
-            tmove = 5
+            t_move = 5
 
     elif game.turn == 3:
         # always play in upper right on transformed board
-        tmove = 3
+        t_move = 3
 
     else:
         # for moves 4-9, look up next move
-        nextmove = Playbook(game.key).getresult()
-        tmove = nextmove[0]
-        game.result = nextmove[1]
+        next_move = Playbook(game.key).getresult()
+        t_move = next_move[0]
+        game.result = next_move[1]
 
     # Update record of transformed game
-    game.trecord[game.turn] = tmove
+    game.t_record[game.turn] = t_move
     # Find move on regular board
-    move = game.rev_transform(tmove)
+    move = game.rev_transform(t_move)
 
     return move
 
@@ -48,7 +48,7 @@ def transform_human_move(game, move):
     # in first two turns, rotate board to put human move in
     # upper left or upper center
     if game.turn in [1, 2]:
-        # need to rotate board to get tboard
+        # need to rotate board to get t_board
         # before updating move (including creating key)
         if move == 3 or move == 6:
             game.rotate = 3
@@ -57,10 +57,10 @@ def transform_human_move(game, move):
         if move == 7 or move == 4:
             game.rotate = 1
 
-    # most complicated transformation on turn three
+    # most complicated transformation happens on turn three
     if game.turn == 3:
         # if AI played in corner turn 2, see if need to flip board along x = -y axis
-        # (same as rotate cw by 90, then flip along vertical, first two moves on tboard
+        # (same as rotate cw by 90, then flip along vertical, first two moves on t_board
         # stay in the same place)
         if game.key == 51:
             if move in [2, 3, 6]:
@@ -68,23 +68,24 @@ def transform_human_move(game, move):
                 game.flip = True
 
         # if AI played in center turn 2
-        # if turn 1 is at 1 on tboard, transformation same as just above,
+        # if turn 1 is at 1 on t_board, transformation same as just above,
         # but have to add to any rotation that already might be there
         if game.key == 15:
             if game.transform(move) in [2, 3, 6]:
                 game.rotate = (game.rotate + 1) % 4
                 game.flip = True
 
-            # turn 1 is at position 2 on tboard; flip if turn 3 on right side
+        # if turn 1 is at position 2 on t_board; flip if turn 3 on right side
         if game.key == 25:
             if game.transform(move) in [3, 6, 9]:
                 game.flip = True
 
-    tmove = game.transform(move)
-    game.trecord[game.turn] = tmove
+    # after any necessary board transformations, can finally update t_record
+    # with transformed mov
+    game.t_record[game.turn] = game.transform(move)
 
 
-def playsmart(game):
+def play_smart(game):
     """
     Play game using the moves in the Playbook for the computer
     updates game.result with game result
@@ -95,7 +96,7 @@ def playsmart(game):
         # if human turn
         if (game.first + game.turn) % 2 == 1:
             move = get_human_move(game)
-            # Update game board transformations and game.tresult
+            # Update game board transformations and game.t_result
             transform_human_move(game, move)
             game.update_board(move)
 
@@ -105,7 +106,7 @@ def playsmart(game):
             computer_move_text(game)
             game.update_board(move)
 
-        printboard(game.cleanboard)
+        print_board(game.clean_board)
 
         # Check if board full and no result
         if game.turn == 10 and game.result == -1:
