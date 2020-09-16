@@ -1,8 +1,12 @@
 # TicTacToe
 Play tic tac toe in the command line like it's 1984!
 
-Put all the .py files in a folder and enter "python TicTacToe.py" to play.
+## How to Play
+You have two options:
+- Put all the .py files in a folder and enter "python TicTacToe.py" to play.
+- Download the contents of the 'dist' folder, find TicTacToe.exe and run it.
 
+## Game Options
 There are 3 modes for the computer move selection:
 - Random: the computer picks a random valid move
 - Casual: the computer picks a random move unless it can block the human from winning or can play a winning move
